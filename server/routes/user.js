@@ -58,8 +58,13 @@ route.delete("/:id", (req, res)=> {
 async function create_user(res, username, password) {
     try {
         const user = await new user_model({username: username, password: password})
-        const data = await user.save() 
-        res.send(user)
+        await user.save() 
+        .then((d)=> {
+            res.send(d)
+        })
+        .catch(err=>{
+            res.status(500).send(err)
+        })
     } catch(err) {
         res.status(400).send({message: err.message})
     }
